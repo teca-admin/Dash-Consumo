@@ -50,165 +50,174 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
   };
 
   return (
-    <header className="bg-white text-slate-900 py-3 px-6 border-b border-slate-200 shadow-sm shrink-0">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-6">
+    <header className="bg-white text-slate-900 py-4 px-6 border-b border-slate-200 shadow-sm shrink-0">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
           <div className="p-1">
             <img 
               src="https://lh3.googleusercontent.com/d/1sNzDKhdh2zH8d8DoyqIjx8l5LzBEXN5g" 
               alt="WFS Logo" 
-              className="h-12 lg:h-16 object-contain"
+              className="h-24 lg:h-32 object-contain"
               referrerPolicy="no-referrer"
             />
           </div>
-          <div className="h-10 w-px bg-slate-200 hidden sm:block"></div>
-          <h1 className="text-lg font-bold tracking-tight text-slate-800 hidden sm:block">
-            Dashboard de <span className="text-primary">Abastecimento</span>
-          </h1>
+          <div className="h-16 w-px bg-slate-200 hidden sm:block"></div>
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold tracking-tight text-slate-800">
+              Dashboard de
+            </h1>
+            <h1 className="text-xl font-bold tracking-tight text-primary">
+              Abastecimento
+            </h1>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-end justify-center lg:justify-end gap-3 w-full lg:w-auto">
-          {/* Summary Boxes in Header */}
-          <div className="flex gap-2">
-            <div className="bg-slate-50 border border-slate-200 rounded-md p-1.5 h-[52px] w-24 flex flex-col justify-center items-center text-center">
-              <p className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Total Litros</p>
-              <p className="text-xs font-bold text-slate-800 truncate w-full">{formatNumber(totalLiters)}</p>
+        <div className="flex flex-col gap-3 items-end">
+          <div className="flex flex-wrap items-center gap-2 bg-slate-50/50 p-2 rounded-lg border border-slate-100">
+            {/* Summary Boxes */}
+            <div className="flex gap-1.5 mr-2">
+              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-24 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-bold text-slate-400 uppercase leading-tight">Total Litros</p>
+                <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatNumber(totalLiters)}</p>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-24 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-bold text-slate-400 uppercase leading-tight">Valor Total Gasto</p>
+                <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-24 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-bold text-slate-400 uppercase leading-tight">VALOR DA NF</p>
+                <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
+              </div>
             </div>
-            <div className="bg-slate-50 border border-slate-200 rounded-md p-1.5 h-[52px] w-24 flex flex-col justify-center items-center text-center">
-              <p className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Valor Total Gasto</p>
-              <p className="text-xs font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
+
+            <div className="h-8 w-px bg-slate-200 mx-1"></div>
+
+            {/* Filters */}
+            <div className="flex items-center gap-1.5">
+              <div className="flex flex-col gap-0.5">
+                <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">PTM</label>
+                <Select value={filters.selectedPTM} onValueChange={setFilters.setSelectedPTM}>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900 h-7 w-20 text-[10px] shadow-sm">
+                    <SelectValue placeholder="all" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">all</SelectItem>
+                    {options.ptms.map(ptm => (
+                      <SelectItem key={ptm} value={ptm}>{ptm}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-0.5">
+                <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">Equipamento</label>
+                <Select value={filters.selectedEquipment} onValueChange={setFilters.setSelectedEquipment}>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900 h-7 w-24 text-[10px] shadow-sm">
+                    <SelectValue placeholder="all" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">all</SelectItem>
+                    {options.equipments.map(eq => (
+                      <SelectItem key={eq} value={eq}>{eq}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-0.5">
+                <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">Fornecedor</label>
+                <Select value={filters.selectedProvider} onValueChange={setFilters.setSelectedProvider}>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900 h-7 w-24 text-[10px] shadow-sm">
+                    <SelectValue placeholder="all" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">all</SelectItem>
+                    {options.providers.map(p => (
+                      <SelectItem key={p} value={p}>{p}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-0.5">
+                <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">Combustível</label>
+                <Select value={filters.selectedFuel} onValueChange={setFilters.setSelectedFuel}>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900 h-7 w-24 text-[10px] shadow-sm">
+                    <SelectValue placeholder="all" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">all</SelectItem>
+                    {options.fuels.map(f => (
+                      <SelectItem key={f} value={f}>{f}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="bg-slate-50 border border-slate-200 rounded-md p-1.5 h-[52px] w-24 flex flex-col justify-center items-center text-center">
-              <p className="text-[9px] font-bold text-slate-500 uppercase leading-tight">VALOR DA NF</p>
-              <p className="text-xs font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
-            </div>
           </div>
 
-          {/* PTM Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-24">
-            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">PTM</label>
-            <Select value={filters.selectedPTM} onValueChange={setFilters.setSelectedPTM}>
-              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="all" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">all</SelectItem>
-                {options.ptms.map(ptm => (
-                  <SelectItem key={ptm} value={ptm}>{ptm}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Equipment Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-32">
-            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Equipamento</label>
-            <Select value={filters.selectedEquipment} onValueChange={setFilters.setSelectedEquipment}>
-              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="all" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">all</SelectItem>
-                {options.equipments.map(eq => (
-                  <SelectItem key={eq} value={eq}>{eq}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Provider Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-32">
-            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Fornecedor</label>
-            <Select value={filters.selectedProvider} onValueChange={setFilters.setSelectedProvider}>
-              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="all" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">all</SelectItem>
-                {options.providers.map(p => (
-                  <SelectItem key={p} value={p}>{p}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Fuel Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-28">
-            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Combustível</label>
-            <Select value={filters.selectedFuel} onValueChange={setFilters.setSelectedFuel}>
-              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="all" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">all</SelectItem>
-                {options.fuels.map(f => (
-                  <SelectItem key={f} value={f}>{f}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Date Range Picker */}
-          <div className="flex flex-col gap-1 w-full sm:w-auto">
-            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Período</label>
-            <Popover>
-              <PopoverTrigger
-                className={cn(
-                  buttonVariants({ variant: "outline" }),
-                  "w-full sm:w-[180px] justify-start text-left font-normal bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100 h-8 text-xs",
-                  !filters.dateRange.from && "text-slate-500"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-3 w-3 text-primary" />
-                {filters.dateRange.from ? (
-                  filters.dateRange.to ? (
-                    <>
-                      {safeFormatDate(filters.dateRange.from, "dd/MM/yy")} -{" "}
-                      {safeFormatDate(filters.dateRange.to, "dd/MM/yy")}
-                    </>
+          <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-0.5">
+              <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">Período</label>
+              <Popover>
+                <PopoverTrigger
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "w-[160px] justify-start text-left font-normal bg-white border-slate-200 text-slate-900 hover:bg-slate-50 h-7 text-[10px] shadow-sm",
+                    !filters.dateRange.from && "text-slate-500"
+                  )}
+                >
+                  <CalendarIcon className="mr-1.5 h-3 w-3 text-primary" />
+                  {filters.dateRange.from ? (
+                    filters.dateRange.to ? (
+                      <>
+                        {safeFormatDate(filters.dateRange.from, "dd/MM/yy")} -{" "}
+                        {safeFormatDate(filters.dateRange.to, "dd/MM/yy")}
+                      </>
+                    ) : (
+                      safeFormatDate(filters.dateRange.from, "dd/MM/yy")
+                    )
                   ) : (
-                    safeFormatDate(filters.dateRange.from, "dd/MM/yy")
-                  )
-                ) : (
-                  <span>Selecione</span>
-                )}
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="end">
-                <Calendar
-                  initialFocus
-                  mode="range"
-                  defaultMonth={filters.dateRange.from}
-                  selected={{
-                    from: filters.dateRange.from,
-                    to: filters.dateRange.to
-                  }}
-                  onSelect={(range) => setFilters.setDateRange({ from: range?.from, to: range?.to })}
-                  numberOfMonths={2}
-                  locale={ptBR}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+                    <span>Selecione</span>
+                  )}
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    initialFocus
+                    mode="range"
+                    defaultMonth={filters.dateRange.from}
+                    selected={{
+                      from: filters.dateRange.from,
+                      to: filters.dateRange.to
+                    }}
+                    onSelect={(range) => setFilters.setDateRange({ from: range?.from, to: range?.to })}
+                    numberOfMonths={2}
+                    locale={ptBR}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
 
-          <div className="flex gap-1.5">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={onShowSpreadsheet}
-              className="text-slate-500 hover:text-primary hover:bg-slate-100 h-8 w-8 border-slate-200"
-              title="Ver Planilha Original"
-            >
-              <TableIcon className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={resetFilters}
-              className="text-slate-400 hover:text-primary hover:bg-slate-100 h-8 w-8"
-              title="Redefinir Filtros"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
+            <div className="flex gap-1 mt-4">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={onShowSpreadsheet}
+                className="text-slate-500 hover:text-primary hover:bg-slate-50 h-7 w-7 border-slate-200 shadow-sm"
+                title="Ver Planilha Original"
+              >
+                <TableIcon className="h-3.5 w-3.5" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={resetFilters}
+                className="text-slate-400 hover:text-primary hover:bg-slate-50 h-7 w-7"
+                title="Redefinir Filtros"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

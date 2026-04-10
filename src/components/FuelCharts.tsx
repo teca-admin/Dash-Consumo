@@ -2,7 +2,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { FuelRecord } from '../types';
 
-const COLORS = ['#e11d48', '#fb7185']; // Primary Red, Lighter Red
+const COLORS = ['#e11d48', '#0f172a']; // Diesel (Red), Gasoline (Blue)
 
 export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = false }: {
   title: string;
@@ -20,6 +20,22 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
   };
 
   const total = data.reduce((acc, d) => acc + d.value, 0);
+
+  const renderLegend = (props: any) => {
+    const { payload } = props;
+    return (
+      <ul className="flex justify-center gap-4 mt-2">
+        {payload.map((entry: any, index: number) => (
+          <li key={`item-${index}`} className="flex items-center gap-1.5 cursor-pointer" onClick={() => onFilter(entry.value)}>
+            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }} />
+            <span className="text-[10px] font-bold text-slate-600">
+              {entry.value}: {isCurrency ? formatCurrency(entry.payload.value) : `${formatNumber(entry.payload.value)} ${unit}`}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <Card className="shadow-sm flex flex-col h-full min-h-[250px]">
@@ -51,7 +67,7 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
                 formatter={(value: number) => [isCurrency ? formatCurrency(value) : `${formatNumber(value)} ${unit}`, '']}
                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
               />
-              <Legend verticalAlign="bottom" height={30} iconSize={10} wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}/>
+              <Legend content={renderLegend} verticalAlign="bottom" />
             </PieChart>
           </ResponsiveContainer>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">

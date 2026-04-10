@@ -76,12 +76,6 @@ export default function PerformanceChart({ records }: PerformanceChartProps) {
                       formatter={formatNumber}
                     />
                   )}
-                  <LabelList 
-                    dataKey={p} 
-                    position="center" 
-                    style={{ fill: '#fff', fontSize: '9px', fontWeight: 'medium' }} 
-                    formatter={(val: number) => val > 50 ? formatNumber(val) : ''}
-                  />
                 </Bar>
               ))}
             </BarChart>

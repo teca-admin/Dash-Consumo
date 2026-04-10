@@ -10,9 +10,10 @@ interface SummaryCardsProps {
     count: number;
   };
   filteredRecords: FuelRecord[];
+  onFilterProvider: (provider: string) => void;
 }
 
-export default function SummaryCards({ stats, filteredRecords }: SummaryCardsProps) {
+export default function SummaryCards({ stats, filteredRecords, onFilterProvider }: SummaryCardsProps) {
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
   };
@@ -32,50 +33,54 @@ export default function SummaryCards({ stats, filteredRecords }: SummaryCardsPro
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Main Stats */}
-      <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow">
-        <CardContent className="p-6 flex items-center justify-between">
+      <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-all">
+        <CardContent className="p-4 flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Valor Total NF</p>
-            <h3 className="text-2xl font-bold mt-1">{formatCurrency(stats.totalValue)}</h3>
+            <p className="text-xs font-semibold text-slate-500 tracking-tight">Valor Total NF</p>
+            <h3 className="text-xl font-bold mt-0.5 text-slate-800">{formatCurrency(stats.totalValue)}</h3>
           </div>
-          <div className="bg-red-50 p-3 rounded-full">
-            <DollarSign className="h-6 w-6 text-primary" />
+          <div className="bg-red-50 p-2.5 rounded-full">
+            <DollarSign className="h-5 w-5 text-primary" />
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-l-4 border-l-blue-600 shadow-sm hover:shadow-md transition-shadow">
-        <CardContent className="p-6 flex items-center justify-between">
+      <Card className="border-l-4 border-l-blue-600 shadow-sm hover:shadow-md transition-all">
+        <CardContent className="p-4 flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Litros</p>
-            <h3 className="text-2xl font-bold mt-1">{formatNumber(stats.totalLiters)} L</h3>
+            <p className="text-xs font-semibold text-slate-500 tracking-tight">Total Litros</p>
+            <h3 className="text-xl font-bold mt-0.5 text-slate-800">{formatNumber(stats.totalLiters)} L</h3>
           </div>
-          <div className="bg-blue-50 p-3 rounded-full">
-            <Fuel className="h-6 w-6 text-blue-600" />
+          <div className="bg-blue-50 p-2.5 rounded-full">
+            <Fuel className="h-5 w-5 text-blue-600" />
           </div>
         </CardContent>
       </Card>
 
       {/* Provider Specific Cards (Dynamic based on top 2) */}
       {providerStats.map((p, idx) => (
-        <Card key={p.name} className={cn(
-          "shadow-sm hover:shadow-md transition-shadow overflow-hidden relative",
-          idx === 0 ? "bg-gradient-to-br from-slate-800 to-slate-900 text-white" : "bg-gradient-to-br from-purple-800 to-purple-900 text-white"
-        )}>
-          <CardContent className="p-6">
+        <Card 
+          key={p.name} 
+          onClick={() => onFilterProvider(p.name)}
+          className={cn(
+            "shadow-sm hover:shadow-md transition-all overflow-hidden relative cursor-pointer active:scale-95",
+            idx === 0 ? "bg-gradient-to-br from-slate-800 to-slate-900 text-white" : "bg-gradient-to-br from-purple-800 to-purple-900 text-white"
+          )}
+        >
+          <CardContent className="p-4">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xs font-medium uppercase tracking-widest opacity-70">{p.name}</p>
-                <p className="text-sm font-medium mt-1">Valor da NF</p>
-                <h3 className="text-xl font-bold mt-1">{formatCurrency(p.value)}</h3>
+                <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">{p.name}</p>
+                <p className="text-xs font-medium mt-0.5 opacity-90">Valor da NF</p>
+                <h3 className="text-lg font-bold mt-0.5">{formatCurrency(p.value)}</h3>
               </div>
-              <div className="bg-white/10 p-2 rounded-lg backdrop-blur-sm">
-                <span className="text-xs font-bold">{p.name.substring(0, 2).toUpperCase()}</span>
+              <div className="bg-white/10 p-1.5 rounded-lg backdrop-blur-sm">
+                <span className="text-[10px] font-bold">{p.name.substring(0, 2).toUpperCase()}</span>
               </div>
             </div>
-            <div className="mt-4 flex items-center gap-2 text-xs opacity-80">
+            <div className="mt-2 flex items-center gap-2 text-[10px] opacity-70">
               <TrendingUp className="h-3 w-3" />
-              <span>+2.4% vs período anterior</span>
+              <span>Clique para filtrar</span>
             </div>
           </CardContent>
         </Card>

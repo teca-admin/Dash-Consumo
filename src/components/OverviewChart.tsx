@@ -38,39 +38,39 @@ export default function OverviewChart({ records }: OverviewChartProps) {
   };
 
   return (
-    <Card className="shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-sm font-bold uppercase text-slate-600">
+    <Card className="h-full shadow-sm flex flex-col overflow-hidden">
+      <CardHeader className="py-2 shrink-0">
+        <CardTitle className="text-xs font-bold text-slate-600">
           Visão Geral - Abastecimentos Mês a Mês (Litros)
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="h-[350px] w-full mt-4">
+      <CardContent className="flex-1 min-h-0 p-2">
+        <div className="h-full w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+              margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
               <XAxis 
                 dataKey="name" 
-                tick={{ fontSize: 11, fill: '#64748b' }}
+                tick={{ fontSize: 9, fill: '#64748b' }}
               />
-              <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
+              <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
               <Tooltip 
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '11px' }}
                 formatter={(value: number) => [`${formatNumber(value)} L`, '']}
               />
-              <Legend verticalAlign="top" align="right" iconType="circle" />
+              <Legend verticalAlign="top" align="right" iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
               {providers.map((p, idx) => (
                 <Line 
                   key={p} 
                   type="monotone" 
                   dataKey={p} 
                   stroke={COLORS[idx % COLORS.length]} 
-                  strokeWidth={3}
-                  dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
-                  activeDot={{ r: 6, strokeWidth: 0 }}
+                  strokeWidth={2}
+                  dot={{ r: 3, strokeWidth: 1.5, fill: '#fff' }}
+                  activeDot={{ r: 5, strokeWidth: 0 }}
                 />
               ))}
             </LineChart>

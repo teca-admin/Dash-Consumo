@@ -18,6 +18,7 @@ export default function App() {
   const [data, setData] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSpreadsheet, setShowSpreadsheet] = useState(false);
 
   // Filters
   const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
@@ -100,7 +101,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
+    <div className="h-screen flex flex-col bg-slate-50 overflow-hidden">
       <Header 
         options={filterOptions}
         filters={{
@@ -117,28 +118,62 @@ export default function App() {
           setSelectedProvider,
           setSelectedFuel
         }}
+        onShowSpreadsheet={() => setShowSpreadsheet(true)}
       />
       
-      <main className="container mx-auto px-4 mt-6 space-y-6">
-        <SummaryCards stats={stats} filteredRecords={filteredRecords} />
+      <main className="flex-1 overflow-hidden p-4 flex flex-col gap-4">
+        <div className="shrink-0">
+          <SummaryCards 
+            stats={stats} 
+            filteredRecords={filteredRecords} 
+            onFilterProvider={(p) => setSelectedProvider(p === selectedProvider ? 'all' : p)}
+          />
+        </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <FuelCharts records={filteredRecords} />
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
+          <div className="lg:col-span-1 flex flex-col gap-4 min-h-0">
+            <FuelCharts 
+              records={filteredRecords} 
+              onFilterFuel={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)}
+            />
           </div>
-          <div className="lg:col-span-2">
-            <PerformanceChart records={filteredRecords} />
+          <div className="lg:col-span-2 flex flex-col gap-4 min-h-0">
+            <div className="flex-1 min-h-0">
+              <PerformanceChart records={filteredRecords} />
+            </div>
+            <div className="flex-1 min-h-0">
+              <OverviewChart records={filteredRecords} />
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
-          <OverviewChart records={filteredRecords} />
-        </div>
-
-        <div className="grid grid-cols-1 gap-6">
+        <div className="h-1/3 min-h-[200px] overflow-hidden">
           <DetailsTable records={filteredRecords} />
         </div>
       </main>
+
+      {showSpreadsheet && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white w-full h-full max-w-6xl rounded-xl shadow-2xl flex flex-col overflow-hidden">
+            <div className="p-4 border-b flex justify-between items-center bg-slate-50">
+              <h2 className="text-lg font-bold text-slate-800">Planilha de Dados Original</h2>
+              <button 
+                onClick={() => setShowSpreadsheet(false)}
+                className="p-2 hover:bg-slate-200 rounded-full transition-colors"
+              >
+                <Loader2 className="h-6 w-6 rotate-45" />
+              </button>
+            </div>
+            <div className="flex-1">
+              <iframe 
+                src="https://docs.google.com/spreadsheets/d/1WSWIEhbHExsSnKb96LioBWb4rkk3Cv7mRYDhWS7Mfuk/edit?usp=sharing" 
+                className="w-full h-full border-none"
+                title="Google Spreadsheet"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

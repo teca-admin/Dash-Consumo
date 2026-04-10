@@ -16,12 +16,17 @@ export async function fetchFuelData(): Promise<DashboardStats> {
 
         const records: FuelRecord[] = rows.map((row) => {
           const equipment = row[8] || '';
-          const fuelType = equipment.toUpperCase() === 'AUTOMÓVEL' ? 'Gasolina' : 'Diesel S10';
+          // Improved fuel type detection: SPIN and similar are usually Gasoline
+          const isGasoline = equipment.toUpperCase().includes('SPIN') || 
+                            equipment.toUpperCase().includes('AUTOMÓVEL') ||
+                            equipment.toUpperCase().includes('CARRO');
+          const fuelType = isGasoline ? 'Gasolina' : 'Diesel S10';
           
-          // Parse numbers (handling potential Brazilian format like 1.234,56)
+          // Parse numbers (handling R$, dots, commas, and quotes)
           const parseNum = (val: string) => {
             if (!val) return 0;
-            const cleaned = val.replace(/\./g, '').replace(',', '.');
+            // Remove R$, spaces, and other non-numeric chars except comma and dot
+            const cleaned = val.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
             const num = parseFloat(cleaned);
             return isNaN(num) ? 0 : num;
           };

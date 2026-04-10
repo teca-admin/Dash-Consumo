@@ -43,44 +43,46 @@ export default function DetailsTable({ records }: DetailsTableProps) {
   const totalValue = data.reduce((acc, d) => acc + d.value, 0);
 
   return (
-    <Card className="shadow-sm overflow-hidden">
-      <CardHeader className="bg-slate-50 border-b">
-        <CardTitle className="text-sm font-bold uppercase text-slate-600">
+    <Card className="h-full shadow-sm flex flex-col overflow-hidden">
+      <CardHeader className="bg-slate-50 border-b py-2 shrink-0">
+        <CardTitle className="text-xs font-bold text-slate-600">
           Detalhamento de Abastecimentos
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="overflow-x-auto">
+      <CardContent className="flex-1 overflow-hidden p-0 flex flex-col">
+        <div className="flex-1 overflow-auto">
           <Table>
-            <TableHeader className="bg-slate-50/50">
+            <TableHeader className="bg-slate-50/50 sticky top-0 z-10">
               <TableRow>
-                <TableHead className="font-bold text-slate-700">EQUIPAMENTO</TableHead>
-                <TableHead className="font-bold text-slate-700">FORNECEDOR</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">ABASTECIMENTOS</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">LITROS ABASTECIDOS</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">VALOR TOTAL</TableHead>
+                <TableHead className="font-bold text-slate-700 text-[10px] h-8">Equipamento</TableHead>
+                <TableHead className="font-bold text-slate-700 text-[10px] h-8">Fornecedor</TableHead>
+                <TableHead className="text-right font-bold text-slate-700 text-[10px] h-8">Abastecimentos</TableHead>
+                <TableHead className="text-right font-bold text-slate-700 text-[10px] h-8">Litros Abastecidos</TableHead>
+                <TableHead className="text-right font-bold text-slate-700 text-[10px] h-8">Valor Total</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row, idx) => (
-                <TableRow key={`${row.equipment}-${row.provider}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-                  <TableCell className="font-medium">{row.equipment}</TableCell>
-                  <TableCell>{row.provider}</TableCell>
-                  <TableCell className="text-right">{row.count}</TableCell>
-                  <TableCell className="text-right">{formatNumber(row.liters)}</TableCell>
-                  <TableCell className="text-right font-medium">{formatCurrency(row.value)}</TableCell>
+                <TableRow key={`${row.equipment}-${row.provider}-${idx}`} className="hover:bg-slate-50/50 transition-colors h-8">
+                  <TableCell className="font-medium text-[11px] py-1">{row.equipment}</TableCell>
+                  <TableCell className="text-[11px] py-1">{row.provider}</TableCell>
+                  <TableCell className="text-right text-[11px] py-1">{row.count}</TableCell>
+                  <TableCell className="text-right text-[11px] py-1">{formatNumber(row.liters)}</TableCell>
+                  <TableCell className="text-right font-medium text-[11px] py-1">{formatCurrency(row.value)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
-            <tfoot className="bg-slate-900 text-white font-bold">
-              <TableRow>
-                <TableCell colSpan={2}>TOTAL GERAL</TableCell>
-                <TableCell className="text-right">{totalCount}</TableCell>
-                <TableCell className="text-right">{formatNumber(totalLiters)}</TableCell>
-                <TableCell className="text-right">{formatCurrency(totalValue)}</TableCell>
-              </TableRow>
-            </tfoot>
           </Table>
+        </div>
+        <div className="bg-slate-900 text-white font-bold text-[11px] shrink-0">
+          <div className="flex items-center px-4 py-2 border-t border-slate-700">
+            <div className="flex-1">Total Geral</div>
+            <div className="flex gap-8">
+              <div className="text-right min-w-[80px]">Abs: {totalCount}</div>
+              <div className="text-right min-w-[100px]">L: {formatNumber(totalLiters)}</div>
+              <div className="text-right min-w-[120px]">V: {formatCurrency(totalValue)}</div>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

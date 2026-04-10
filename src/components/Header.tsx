@@ -28,9 +28,11 @@ interface HeaderProps {
     setSelectedFuel: (val: string) => void;
   };
   onShowSpreadsheet: () => void;
+  totalValue: number;
+  totalLiters: number;
 }
 
-export default function Header({ options, filters, setFilters, onShowSpreadsheet }: HeaderProps) {
+export default function Header({ options, filters, setFilters, onShowSpreadsheet, totalValue, totalLiters }: HeaderProps) {
   const resetFilters = () => {
     setFilters.setDateRange({ from: undefined, to: undefined });
     setFilters.setSelectedPTM('all');
@@ -39,34 +41,58 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
     setFilters.setSelectedFuel('all');
   };
 
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(val);
+  };
+
+  const formatNumber = (val: number) => {
+    return new Intl.NumberFormat('pt-BR').format(val);
+  };
+
   return (
-    <header className="bg-white text-slate-900 py-2 px-6 border-b border-slate-200 shadow-sm shrink-0">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+    <header className="bg-white text-slate-900 py-3 px-6 border-b border-slate-200 shadow-sm shrink-0">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-6">
           <div className="p-1">
             <img 
               src="https://lh3.googleusercontent.com/d/1sNzDKhdh2zH8d8DoyqIjx8l5LzBEXN5g" 
               alt="WFS Logo" 
-              className="h-24 lg:h-32 object-contain"
+              className="h-12 lg:h-16 object-contain"
               referrerPolicy="no-referrer"
             />
           </div>
-          <div className="h-12 w-px bg-slate-200 hidden sm:block"></div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-800 hidden sm:block">
+          <div className="h-10 w-px bg-slate-200 hidden sm:block"></div>
+          <h1 className="text-lg font-bold tracking-tight text-slate-800 hidden sm:block">
             Dashboard de <span className="text-primary">Abastecimento</span>
           </h1>
         </div>
 
         <div className="flex flex-wrap items-end justify-center lg:justify-end gap-3 w-full lg:w-auto">
+          {/* Summary Boxes in Header */}
+          <div className="flex gap-2">
+            <div className="bg-slate-50 border border-slate-200 rounded-md p-1.5 h-[52px] w-24 flex flex-col justify-center items-center text-center">
+              <p className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Total Litros</p>
+              <p className="text-xs font-bold text-slate-800 truncate w-full">{formatNumber(totalLiters)}</p>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-md p-1.5 h-[52px] w-24 flex flex-col justify-center items-center text-center">
+              <p className="text-[9px] font-bold text-slate-500 uppercase leading-tight">Valor Total Gasto</p>
+              <p className="text-xs font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded-md p-1.5 h-[52px] w-24 flex flex-col justify-center items-center text-center">
+              <p className="text-[9px] font-bold text-slate-500 uppercase leading-tight">VALOR DA NF</p>
+              <p className="text-xs font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
+            </div>
+          </div>
+
           {/* PTM Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-32">
-            <label className="text-[10px] font-semibold text-slate-500 ml-1">PTM</label>
+          <div className="flex flex-col gap-1 w-full sm:w-24">
+            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">PTM</label>
             <Select value={filters.selectedPTM} onValueChange={setFilters.setSelectedPTM}>
               <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="PTM" />
+                <SelectValue placeholder="all" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos PTMs</SelectItem>
+                <SelectItem value="all">all</SelectItem>
                 {options.ptms.map(ptm => (
                   <SelectItem key={ptm} value={ptm}>{ptm}</SelectItem>
                 ))}
@@ -75,14 +101,14 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
           </div>
 
           {/* Equipment Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-40">
-            <label className="text-[10px] font-semibold text-slate-500 ml-1">Equipamento</label>
+          <div className="flex flex-col gap-1 w-full sm:w-32">
+            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Equipamento</label>
             <Select value={filters.selectedEquipment} onValueChange={setFilters.setSelectedEquipment}>
               <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="Equipamento" />
+                <SelectValue placeholder="all" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos Equipamentos</SelectItem>
+                <SelectItem value="all">all</SelectItem>
                 {options.equipments.map(eq => (
                   <SelectItem key={eq} value={eq}>{eq}</SelectItem>
                 ))}
@@ -91,14 +117,14 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
           </div>
 
           {/* Provider Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-40">
-            <label className="text-[10px] font-semibold text-slate-500 ml-1">Fornecedor</label>
+          <div className="flex flex-col gap-1 w-full sm:w-32">
+            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Fornecedor</label>
             <Select value={filters.selectedProvider} onValueChange={setFilters.setSelectedProvider}>
               <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="Fornecedor" />
+                <SelectValue placeholder="all" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos Fornecedores</SelectItem>
+                <SelectItem value="all">all</SelectItem>
                 {options.providers.map(p => (
                   <SelectItem key={p} value={p}>{p}</SelectItem>
                 ))}
@@ -107,14 +133,14 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
           </div>
 
           {/* Fuel Filter */}
-          <div className="flex flex-col gap-1 w-full sm:w-32">
-            <label className="text-[10px] font-semibold text-slate-500 ml-1">Combustível</label>
+          <div className="flex flex-col gap-1 w-full sm:w-28">
+            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Combustível</label>
             <Select value={filters.selectedFuel} onValueChange={setFilters.setSelectedFuel}>
               <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-8 text-xs">
-                <SelectValue placeholder="Combustível" />
+                <SelectValue placeholder="all" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos Combustíveis</SelectItem>
+                <SelectItem value="all">all</SelectItem>
                 {options.fuels.map(f => (
                   <SelectItem key={f} value={f}>{f}</SelectItem>
                 ))}
@@ -124,12 +150,12 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
 
           {/* Date Range Picker */}
           <div className="flex flex-col gap-1 w-full sm:w-auto">
-            <label className="text-[10px] font-semibold text-slate-500 ml-1">Período</label>
+            <label className="text-[10px] font-bold text-slate-500 ml-1 uppercase">Período</label>
             <Popover>
               <PopoverTrigger
                 className={cn(
                   buttonVariants({ variant: "outline" }),
-                  "w-full sm:w-[200px] justify-start text-left font-normal bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100 h-8 text-xs",
+                  "w-full sm:w-[180px] justify-start text-left font-normal bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100 h-8 text-xs",
                   !filters.dateRange.from && "text-slate-500"
                 )}
               >
@@ -144,7 +170,7 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
                     safeFormatDate(filters.dateRange.from, "dd/MM/yy")
                   )
                 ) : (
-                  <span>Selecione o período</span>
+                  <span>Selecione</span>
                 )}
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="end">
@@ -164,7 +190,7 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
             </Popover>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             <Button 
               variant="outline" 
               size="icon" 

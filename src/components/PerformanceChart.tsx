@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, LabelList } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { FuelRecord } from '../types';
 
@@ -67,7 +67,22 @@ export default function PerformanceChart({ records }: PerformanceChartProps) {
                   stackId="a" 
                   fill={COLORS[idx % COLORS.length]} 
                   radius={[idx === providers.length - 1 ? 4 : 0, idx === providers.length - 1 ? 4 : 0, 0, 0]}
-                />
+                >
+                  {idx === providers.length - 1 && (
+                    <LabelList 
+                      dataKey="total" 
+                      position="top" 
+                      style={{ fill: '#64748b', fontSize: '10px', fontWeight: 'bold' }} 
+                      formatter={formatNumber}
+                    />
+                  )}
+                  <LabelList 
+                    dataKey={p} 
+                    position="center" 
+                    style={{ fill: '#fff', fontSize: '9px', fontWeight: 'medium' }} 
+                    formatter={(val: number) => val > 50 ? formatNumber(val) : ''}
+                  />
+                </Bar>
               ))}
             </BarChart>
           </ResponsiveContainer>

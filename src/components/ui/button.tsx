@@ -46,14 +46,11 @@ function Button({
   size = "default",
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
-  // @ts-ignore - defensively strip asChild if it leaks from Radix-style usage
-  const { asChild, ...rest } = props;
-  
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
-      {...rest}
+      {...props}
     />
   )
 }

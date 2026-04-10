@@ -7,12 +7,12 @@ import { useState, useEffect, useMemo } from 'react';
 import { fetchFuelData } from './services/dataService';
 import { FuelRecord, DashboardStats } from './types';
 import Header from './components/Header';
-import SummaryCards from './components/SummaryCards';
-import FuelCharts from './components/FuelCharts';
+import { StatCard } from './components/SummaryCards';
+import { PieChartCard } from './components/FuelCharts';
 import PerformanceChart from './components/PerformanceChart';
 import OverviewChart from './components/OverviewChart';
 import DetailsTable from './components/DetailsTable';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Fuel, DollarSign } from 'lucide-react';
 
 export default function App() {
   const [data, setData] = useState<DashboardStats | null>(null);
@@ -62,6 +62,16 @@ export default function App() {
     };
   }, [filteredRecords]);
 
+  const litersData = useMemo(() => [
+    { name: 'Gasolina', value: filteredRecords.filter(r => r.fuelType === 'Gasolina').reduce((acc, r) => acc + r.liters, 0) },
+    { name: 'Diesel S10', value: filteredRecords.filter(r => r.fuelType === 'Diesel S10').reduce((acc, r) => acc + r.liters, 0) }
+  ], [filteredRecords]);
+
+  const costData = useMemo(() => [
+    { name: 'Gasolina', value: filteredRecords.filter(r => r.fuelType === 'Gasolina').reduce((acc, r) => acc + r.value, 0) },
+    { name: 'Diesel S10', value: filteredRecords.filter(r => r.fuelType === 'Diesel S10').reduce((acc, r) => acc + r.value, 0) }
+  ], [filteredRecords]);
+
   const filterOptions = useMemo(() => {
     if (!data) return { ptms: [], equipments: [], providers: [], fuels: ['Diesel S10', 'Gasolina'] };
     return {
@@ -71,6 +81,14 @@ export default function App() {
       fuels: ['Diesel S10', 'Gasolina']
     };
   }, [data]);
+
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+  };
+
+  const formatNumber = (val: number) => {
+    return new Intl.NumberFormat('pt-BR').format(val);
+  };
 
   if (loading) {
     return (
@@ -119,36 +137,48 @@ export default function App() {
           setSelectedFuel
         }}
         onShowSpreadsheet={() => setShowSpreadsheet(true)}
+        totalValue={stats.totalValue}
+        totalLiters={stats.totalLiters}
       />
       
       <main className="flex-1 p-4 flex flex-col gap-6 max-w-[1600px] mx-auto w-full">
-        <div className="shrink-0">
-          <SummaryCards 
-            stats={stats} 
-            filteredRecords={filteredRecords} 
-            onFilterProvider={(p) => setSelectedProvider(p === selectedProvider ? 'all' : p)}
-          />
-        </div>
-        
+        {/* Row 1: Pie Charts and Performance */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-3">
-            <FuelCharts 
-              records={filteredRecords} 
-              onFilterFuel={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)}
+            <PieChartCard 
+              title="Custo por Combustível" 
+              data={costData} 
+              onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
+              isCurrency 
             />
           </div>
-          <div className="lg:col-span-9 flex flex-col gap-6">
-            <div className="h-[300px]">
+          <div className="lg:col-span-3">
+            <PieChartCard 
+              title="Litragem por Combustível" 
+              data={litersData} 
+              onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
+              unit="L" 
+            />
+          </div>
+          <div className="lg:col-span-6">
+            <div className="h-full min-h-[350px]">
               <PerformanceChart records={filteredRecords} />
-            </div>
-            <div className="h-[300px]">
-              <OverviewChart records={filteredRecords} />
             </div>
           </div>
         </div>
 
-        <div className="min-h-[400px]">
-          <DetailsTable records={filteredRecords} />
+        {/* Row 2: Table and Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-6">
+            <div className="h-full min-h-[400px]">
+              <DetailsTable records={filteredRecords} />
+            </div>
+          </div>
+          <div className="lg:col-span-6">
+            <div className="h-full min-h-[400px]">
+              <OverviewChart records={filteredRecords} dateRange={dateRange} />
+            </div>
+          </div>
         </div>
       </main>
 

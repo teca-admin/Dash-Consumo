@@ -46,9 +46,12 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
           {title}
         </CardTitle>
         {percentageChange !== undefined && percentageChange !== 0 && (
-          <div className={`flex items-center gap-1 text-[11px] font-bold ${percentageChange > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
-            {percentageChange > 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-            {Math.abs(percentageChange).toFixed(1)}%
+          <div className="flex flex-col items-end">
+            <div className={`flex items-center gap-1 text-[12.5px] font-bold ${percentageChange > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+              {percentageChange > 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+              {Math.abs(percentageChange).toFixed(1)}%
+            </div>
+            <p className="text-[8px] text-slate-400 font-medium leading-none mt-0.5">vs. período anterior</p>
           </div>
         )}
       </CardHeader>

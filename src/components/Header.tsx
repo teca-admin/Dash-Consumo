@@ -84,9 +84,9 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
                 <p className="text-[8px] font-black text-slate-500 uppercase leading-tight">Valor Total Gasto</p>
                 <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
               </div>
-              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-28 flex flex-col justify-center items-center text-center shadow-sm">
-                <p className="text-[8px] font-black text-slate-500 uppercase leading-tight">Fornecedor</p>
-                <p className="text-[10px] font-bold text-slate-800 truncate w-full">AUTO POSTO GASPETRO</p>
+              <div className="bg-[#0f172a] border border-[#0f172a] rounded-md p-1.5 h-[48px] w-28 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-black text-white/70 uppercase leading-tight">Fornecedor</p>
+                <p className="text-[10px] font-bold text-white truncate w-full">AUTO POSTO GASPETRO</p>
               </div>
             </div>
 

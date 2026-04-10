@@ -76,17 +76,17 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
           <div className="flex flex-wrap items-center gap-2 bg-slate-50/50 p-2 rounded-lg border border-slate-100">
             {/* Summary Boxes */}
             <div className="flex gap-1.5 mr-2">
-              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-24 flex flex-col justify-center items-center text-center shadow-sm">
-                <p className="text-[8px] font-bold text-slate-400 uppercase leading-tight">Total Litros</p>
+              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-28 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-black text-slate-500 uppercase leading-tight">Total Litros</p>
                 <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatNumber(totalLiters)}</p>
               </div>
-              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-24 flex flex-col justify-center items-center text-center shadow-sm">
-                <p className="text-[8px] font-bold text-slate-400 uppercase leading-tight">Valor Total Gasto</p>
+              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-28 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-black text-slate-500 uppercase leading-tight">Valor Total Gasto</p>
                 <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
               </div>
-              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-24 flex flex-col justify-center items-center text-center shadow-sm">
-                <p className="text-[8px] font-bold text-slate-400 uppercase leading-tight">VALOR DA NF</p>
-                <p className="text-[11px] font-bold text-slate-800 truncate w-full">{formatCurrency(totalValue)}</p>
+              <div className="bg-white border border-slate-200 rounded-md p-1.5 h-[48px] w-28 flex flex-col justify-center items-center text-center shadow-sm">
+                <p className="text-[8px] font-black text-slate-500 uppercase leading-tight">Fornecedor</p>
+                <p className="text-[10px] font-bold text-slate-800 truncate w-full">AUTO POSTO GASPETRO</p>
               </div>
             </div>
 

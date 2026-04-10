@@ -200,7 +200,7 @@ export default function App() {
             </div>
             <div className="flex-1">
               <iframe 
-                src="https://docs.google.com/spreadsheets/d/1WSWIEhbHExsSnKb96LioBWb4rkk3Cv7mRYDhWS7Mfuk/edit?usp=sharing" 
+                src="https://docs.google.com/spreadsheets/d/1WSWIEhbHExsSnKb96LioBWb4rkk3Cv7mRYDhWS7Mfuk/preview" 
                 className="w-full h-full border-none"
                 title="Google Spreadsheet"
               />

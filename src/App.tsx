@@ -92,7 +92,9 @@ export default function App() {
       totalValue,
       count: filteredRecords.length,
       litersChange,
-      valueChange
+      valueChange,
+      prevTotalLiters,
+      prevTotalValue
     };
   }, [filteredRecords, previousPeriodRecords]);
 
@@ -129,22 +131,33 @@ export default function App() {
     
     setIsExporting(true);
     try {
-      // Create a clone of the dashboard to render off-screen or with specific styles
+      // Small delay to ensure any pending renders are complete
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       const element = dashboardRef.current;
       
       // Use html2canvas to capture the dashboard
-      // We set scale to 2 for higher quality
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
+        allowTaint: true,
         logging: false,
-        backgroundColor: '#f8fafc', // Match slate-50
-        windowWidth: 1600, // Force a desktop width for the capture
+        backgroundColor: '#f8fafc',
+        scrollX: 0,
+        scrollY: 0,
+        onclone: (clonedDoc) => {
+          // Ensure the cloned element is visible and has proper dimensions
+          const clonedElement = clonedDoc.getElementById('dashboard-container');
+          if (clonedElement) {
+            clonedElement.style.height = 'auto';
+            clonedElement.style.overflow = 'visible';
+          }
+        }
       });
       
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/png', 1.0);
       const pdf = new jsPDF({
-        orientation: 'landscape',
+        orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
         unit: 'px',
         format: [canvas.width, canvas.height]
       });
@@ -153,6 +166,7 @@ export default function App() {
       pdf.save(`dashboard-abastecimento-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (err) {
       console.error('Erro ao exportar PDF:', err);
+      alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
     } finally {
       setIsExporting(false);
     }
@@ -187,7 +201,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50" ref={dashboardRef}>
+    <div id="dashboard-container" className="min-h-screen flex flex-col bg-slate-50" ref={dashboardRef}>
       <Header 
         options={filterOptions}
         filters={{
@@ -222,6 +236,7 @@ export default function App() {
                 onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
                 isCurrency 
                 percentageChange={stats.valueChange}
+                previousValue={stats.prevTotalValue}
               />
             </div>
           </div>
@@ -233,6 +248,7 @@ export default function App() {
                 onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
                 unit="L" 
                 percentageChange={stats.litersChange}
+                previousValue={stats.prevTotalLiters}
               />
             </div>
           </div>

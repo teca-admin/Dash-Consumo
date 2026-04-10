@@ -5,13 +5,14 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 
 const COLORS = ['#e11d48', '#0f172a']; // Diesel (Red), Gasoline (Blue)
 
-export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = false, percentageChange }: {
+export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = false, percentageChange, previousValue }: {
   title: string;
   data: { name: string; value: number }[];
   onFilter: (name: string) => void;
   unit?: string;
   isCurrency?: boolean;
   percentageChange?: number;
+  previousValue?: number;
 }) {
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(val);
@@ -52,6 +53,11 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
               {Math.abs(percentageChange).toFixed(1)}%
             </div>
             <p className="text-[16px] text-slate-400 font-medium leading-none mt-1">vs. período anterior</p>
+            {previousValue !== undefined && (
+              <p className="text-[12px] text-slate-500 font-bold mt-1">
+                ({isCurrency ? formatCurrency(previousValue) : `${formatNumber(previousValue)} ${unit}`})
+              </p>
+            )}
           </div>
         )}
       </CardHeader>

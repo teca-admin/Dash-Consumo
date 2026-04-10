@@ -40,25 +40,29 @@ export default function Header({ options, filters, setFilters }: HeaderProps) {
   };
 
   return (
-    <header className="bg-primary text-white py-4 px-6 shadow-md">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+    <header className="bg-white text-slate-900 py-4 px-6 border-b border-slate-200 shadow-sm">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-4">
-          <div className="bg-white p-2 rounded-lg">
+          <div className="p-1">
             <img 
               src="https://lh3.googleusercontent.com/d/1sNzDKhdh2zH8d8DoyqIjx8l5LzBEXN5g" 
               alt="WFS Logo" 
-              className="h-10 object-contain"
+              className="h-16 object-contain"
               referrerPolicy="no-referrer"
             />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight hidden sm:block">WFS DASHBOARD</h1>
+          <div className="h-10 w-px bg-slate-200 hidden sm:block mx-2"></div>
+          <h1 className="text-xl font-extrabold tracking-tight text-slate-800 hidden sm:block">
+            DASHBOARD DE <span className="text-primary">ABASTECIMENTO</span>
+          </h1>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3 w-full lg:w-auto">
+        <div className="flex flex-wrap items-end justify-center lg:justify-end gap-4 w-full lg:w-auto">
           {/* PTM Filter */}
-          <div className="w-full sm:w-40">
+          <div className="flex flex-col gap-1.5 w-full sm:w-36">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 ml-1">PTM</label>
             <Select value={filters.selectedPTM} onValueChange={setFilters.setSelectedPTM}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white focus:ring-white/30">
+              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-9">
                 <SelectValue placeholder="PTM" />
               </SelectTrigger>
               <SelectContent>
@@ -71,9 +75,10 @@ export default function Header({ options, filters, setFilters }: HeaderProps) {
           </div>
 
           {/* Equipment Filter */}
-          <div className="w-full sm:w-48">
+          <div className="flex flex-col gap-1.5 w-full sm:w-44">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 ml-1">Equipamento</label>
             <Select value={filters.selectedEquipment} onValueChange={setFilters.setSelectedEquipment}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white focus:ring-white/30">
+              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-9">
                 <SelectValue placeholder="Equipamento" />
               </SelectTrigger>
               <SelectContent>
@@ -86,9 +91,10 @@ export default function Header({ options, filters, setFilters }: HeaderProps) {
           </div>
 
           {/* Provider Filter */}
-          <div className="w-full sm:w-48">
+          <div className="flex flex-col gap-1.5 w-full sm:w-44">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 ml-1">Fornecedor</label>
             <Select value={filters.selectedProvider} onValueChange={setFilters.setSelectedProvider}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white focus:ring-white/30">
+              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-9">
                 <SelectValue placeholder="Fornecedor" />
               </SelectTrigger>
               <SelectContent>
@@ -101,9 +107,10 @@ export default function Header({ options, filters, setFilters }: HeaderProps) {
           </div>
 
           {/* Fuel Filter */}
-          <div className="w-full sm:w-40">
+          <div className="flex flex-col gap-1.5 w-full sm:w-36">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 ml-1">Combustível</label>
             <Select value={filters.selectedFuel} onValueChange={setFilters.setSelectedFuel}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white focus:ring-white/30">
+              <SelectTrigger className="bg-slate-50 border-slate-200 text-slate-900 h-9">
                 <SelectValue placeholder="Combustível" />
               </SelectTrigger>
               <SelectContent>
@@ -116,16 +123,17 @@ export default function Header({ options, filters, setFilters }: HeaderProps) {
           </div>
 
           {/* Date Range Picker */}
-          <div className="w-full sm:w-auto">
+          <div className="flex flex-col gap-1.5 w-full sm:w-auto">
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 ml-1">Período</label>
             <Popover>
               <PopoverTrigger
                 className={cn(
                   buttonVariants({ variant: "outline" }),
-                  "w-full sm:w-[260px] justify-start text-left font-normal bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white",
-                  !filters.dateRange.from && "text-white/60"
+                  "w-full sm:w-[240px] justify-start text-left font-normal bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100 h-9",
+                  !filters.dateRange.from && "text-slate-500"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
+                <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                 {filters.dateRange.from ? (
                   filters.dateRange.to ? (
                     <>
@@ -160,7 +168,7 @@ export default function Header({ options, filters, setFilters }: HeaderProps) {
             variant="ghost" 
             size="icon" 
             onClick={resetFilters}
-            className="text-white hover:bg-white/20"
+            className="text-slate-400 hover:text-primary hover:bg-slate-100 h-9 w-9"
             title="Redefinir Filtros"
           >
             <RotateCcw className="h-4 w-4" />

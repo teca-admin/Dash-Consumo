@@ -33,10 +33,10 @@ export default function SummaryCards({ stats, filteredRecords, onFilterProvider 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Main Stats */}
-      <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-all">
+      <Card className="shadow-sm hover:shadow-md transition-all">
         <CardContent className="p-4 flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-slate-500 tracking-tight">Valor Total NF</p>
+            <p className="text-xs font-semibold text-slate-500 tracking-tight">Valor Total Gasto</p>
             <h3 className="text-xl font-bold mt-0.5 text-slate-800">{formatCurrency(stats.totalValue)}</h3>
           </div>
           <div className="bg-red-50 p-2.5 rounded-full">
@@ -45,7 +45,7 @@ export default function SummaryCards({ stats, filteredRecords, onFilterProvider 
         </CardContent>
       </Card>
 
-      <Card className="border-l-4 border-l-blue-600 shadow-sm hover:shadow-md transition-all">
+      <Card className="shadow-sm hover:shadow-md transition-all">
         <CardContent className="p-4 flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-slate-500 tracking-tight">Total Litros</p>

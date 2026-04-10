@@ -32,12 +32,12 @@ export default function PerformanceChart({ records }: PerformanceChartProps) {
 
   return (
     <Card className="h-full shadow-sm flex flex-col overflow-hidden">
-      <CardHeader className="py-2 shrink-0">
-        <CardTitle className="text-xs font-bold text-slate-600">
+      <CardHeader className="py-3 shrink-0">
+        <CardTitle className="text-sm font-bold text-slate-600">
           Performance de Abastecimento por Equipamento (Litros)
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 min-h-0 p-2">
+      <CardContent className="flex-1 min-h-0 p-4">
         <div className="h-full w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -50,16 +50,16 @@ export default function PerformanceChart({ records }: PerformanceChartProps) {
                 angle={-45} 
                 textAnchor="end" 
                 interval={0} 
-                height={50}
-                tick={{ fontSize: 9, fill: '#64748b' }}
+                height={60}
+                tick={{ fontSize: 10, fill: '#64748b' }}
               />
-              <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
+              <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
               <Tooltip 
                 cursor={{ fill: '#f8fafc' }}
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '11px' }}
+                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', fontSize: '12px' }}
                 formatter={(value: number) => [`${formatNumber(value)} L`, '']}
               />
-              <Legend verticalAlign="top" align="right" iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
+              <Legend verticalAlign="top" align="right" iconType="circle" wrapperStyle={{ fontSize: '11px', paddingBottom: '10px' }} />
               {providers.map((p, idx) => (
                 <Bar 
                   key={p} 

@@ -3,7 +3,7 @@ import { Button, buttonVariants } from './ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { ptBR } from 'date-fns/locale';
-import { Calendar as CalendarIcon, RotateCcw, Table as TableIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, RotateCcw, Table as TableIcon, Download, Loader2 } from 'lucide-react';
 import { cn, safeFormatDate } from '@/lib/utils';
 
 interface HeaderProps {
@@ -28,11 +28,13 @@ interface HeaderProps {
     setSelectedFuel: (val: string) => void;
   };
   onShowSpreadsheet: () => void;
+  onExportPDF: () => void;
+  isExporting: boolean;
   totalValue: number;
   totalLiters: number;
 }
 
-export default function Header({ options, filters, setFilters, onShowSpreadsheet, totalValue, totalLiters }: HeaderProps) {
+export default function Header({ options, filters, setFilters, onShowSpreadsheet, onExportPDF, isExporting, totalValue, totalLiters }: HeaderProps) {
   const resetFilters = () => {
     setFilters.setDateRange({ from: undefined, to: undefined });
     setFilters.setSelectedPTM('all');
@@ -199,16 +201,26 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
             </Popover>
           </div>
 
-          <div className="flex gap-1 mt-4">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={onShowSpreadsheet}
-              className="text-slate-500 hover:text-primary hover:bg-slate-50 h-7 w-7 border-slate-200 shadow-sm"
-              title="Ver Planilha Original"
-            >
-              <TableIcon className="h-3.5 w-3.5" />
-            </Button>
+            <div className="flex gap-1 mt-4">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={onExportPDF}
+                disabled={isExporting}
+                className="text-slate-500 hover:text-primary hover:bg-slate-50 h-7 w-7 border-slate-200 shadow-sm"
+                title="Exportar PDF"
+              >
+                {isExporting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={onShowSpreadsheet}
+                className="text-slate-500 hover:text-primary hover:bg-slate-50 h-7 w-7 border-slate-200 shadow-sm"
+                title="Ver Planilha Original"
+              >
+                <TableIcon className="h-3.5 w-3.5" />
+              </Button>
             <Button 
               variant="ghost" 
               size="icon" 

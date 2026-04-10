@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { fetchFuelData } from './services/dataService';
 import { FuelRecord, DashboardStats } from './types';
 import Header from './components/Header';
@@ -14,12 +14,16 @@ import OverviewChart from './components/OverviewChart';
 import DetailsTable from './components/DetailsTable';
 import { Loader2, Fuel, DollarSign } from 'lucide-react';
 import { subMonths, startOfMonth, endOfMonth, differenceInDays, subDays } from 'date-fns';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default function App() {
   const [data, setData] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showSpreadsheet, setShowSpreadsheet] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const dashboardRef = useRef<HTMLDivElement>(null);
 
   // Filters
   const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>(() => {
@@ -120,6 +124,40 @@ export default function App() {
     return new Intl.NumberFormat('pt-BR').format(val);
   };
 
+  const handleExportPDF = async () => {
+    if (!dashboardRef.current) return;
+    
+    setIsExporting(true);
+    try {
+      // Create a clone of the dashboard to render off-screen or with specific styles
+      const element = dashboardRef.current;
+      
+      // Use html2canvas to capture the dashboard
+      // We set scale to 2 for higher quality
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#f8fafc', // Match slate-50
+        windowWidth: 1600, // Force a desktop width for the capture
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`dashboard-abastecimento-${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (err) {
+      console.error('Erro ao exportar PDF:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-slate-50">
@@ -149,7 +187,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-slate-50" ref={dashboardRef}>
       <Header 
         options={filterOptions}
         filters={{
@@ -167,6 +205,8 @@ export default function App() {
           setSelectedFuel
         }}
         onShowSpreadsheet={() => setShowSpreadsheet(true)}
+        onExportPDF={handleExportPDF}
+        isExporting={isExporting}
         totalValue={stats.totalValue}
         totalLiters={stats.totalLiters}
       />

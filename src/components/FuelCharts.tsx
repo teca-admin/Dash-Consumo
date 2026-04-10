@@ -51,7 +51,7 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
               {percentageChange > 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
               {Math.abs(percentageChange).toFixed(1)}%
             </div>
-            <p className="text-[8px] text-slate-400 font-medium leading-none mt-0.5">vs. período anterior</p>
+            <p className="text-[16px] text-slate-400 font-medium leading-none mt-1">vs. período anterior</p>
           </div>
         )}
       </CardHeader>

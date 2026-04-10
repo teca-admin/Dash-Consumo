@@ -13,6 +13,7 @@ import PerformanceChart from './components/PerformanceChart';
 import OverviewChart from './components/OverviewChart';
 import DetailsTable from './components/DetailsTable';
 import { Loader2, Fuel, DollarSign } from 'lucide-react';
+import { subMonths, startOfMonth, endOfMonth, differenceInDays, subDays } from 'date-fns';
 
 export default function App() {
   const [data, setData] = useState<DashboardStats | null>(null);
@@ -21,9 +22,12 @@ export default function App() {
   const [showSpreadsheet, setShowSpreadsheet] = useState(false);
 
   // Filters
-  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
-    from: undefined,
-    to: undefined
+  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>(() => {
+    const prevMonth = subMonths(new Date(), 1);
+    return {
+      from: startOfMonth(prevMonth),
+      to: endOfMonth(prevMonth)
+    };
   });
   const [selectedPTM, setSelectedPTM] = useState<string>('all');
   const [selectedEquipment, setSelectedEquipment] = useState<string>('all');
@@ -51,16 +55,42 @@ export default function App() {
     });
   }, [data, dateRange, selectedPTM, selectedEquipment, selectedProvider, selectedFuel]);
 
+  const previousPeriodRecords = useMemo(() => {
+    if (!data || !dateRange.from || !dateRange.to) return [];
+    
+    const daysDiff = differenceInDays(dateRange.to, dateRange.from) + 1;
+    const prevFrom = subDays(dateRange.from, daysDiff);
+    const prevTo = subDays(dateRange.to, daysDiff);
+
+    return data.records.filter(record => {
+      const dateMatch = record.date >= prevFrom && record.date <= prevTo;
+      const ptmMatch = selectedPTM === 'all' || record.ptm === selectedPTM;
+      const equipMatch = selectedEquipment === 'all' || record.equipment === selectedEquipment;
+      const providerMatch = selectedProvider === 'all' || record.provider === selectedProvider;
+      const fuelMatch = selectedFuel === 'all' || record.fuelType === selectedFuel;
+
+      return dateMatch && ptmMatch && equipMatch && providerMatch && fuelMatch;
+    });
+  }, [data, dateRange, selectedPTM, selectedEquipment, selectedProvider, selectedFuel]);
+
   const stats = useMemo(() => {
     const totalLiters = filteredRecords.reduce((acc, r) => acc + r.liters, 0);
     const totalValue = filteredRecords.reduce((acc, r) => acc + r.value, 0);
     
+    const prevTotalLiters = previousPeriodRecords.reduce((acc, r) => acc + r.liters, 0);
+    const prevTotalValue = previousPeriodRecords.reduce((acc, r) => acc + r.value, 0);
+
+    const litersChange = prevTotalLiters > 0 ? ((totalLiters - prevTotalLiters) / prevTotalLiters) * 100 : 0;
+    const valueChange = prevTotalValue > 0 ? ((totalValue - prevTotalValue) / prevTotalValue) * 100 : 0;
+
     return {
       totalLiters,
       totalValue,
-      count: filteredRecords.length
+      count: filteredRecords.length,
+      litersChange,
+      valueChange
     };
-  }, [filteredRecords]);
+  }, [filteredRecords, previousPeriodRecords]);
 
   const litersData = useMemo(() => [
     { name: 'Gasolina', value: filteredRecords.filter(r => r.fuelType === 'Gasolina').reduce((acc, r) => acc + r.liters, 0) },
@@ -151,6 +181,7 @@ export default function App() {
                 data={costData} 
                 onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
                 isCurrency 
+                percentageChange={stats.valueChange}
               />
             </div>
           </div>
@@ -161,6 +192,7 @@ export default function App() {
                 data={litersData} 
                 onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
                 unit="L" 
+                percentageChange={stats.litersChange}
               />
             </div>
           </div>

@@ -1,15 +1,17 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { FuelRecord } from '../types';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 
 const COLORS = ['#e11d48', '#0f172a']; // Diesel (Red), Gasoline (Blue)
 
-export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = false }: {
+export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = false, percentageChange }: {
   title: string;
   data: { name: string; value: number }[];
   onFilter: (name: string) => void;
   unit?: string;
   isCurrency?: boolean;
+  percentageChange?: number;
 }) {
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(val);
@@ -39,10 +41,16 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
 
   return (
     <Card className="shadow-sm flex flex-col h-full min-h-[250px]">
-      <CardHeader className="py-3 shrink-0">
-        <CardTitle className="text-sm font-bold text-center text-slate-600">
+      <CardHeader className="py-3 shrink-0 flex flex-row items-center justify-between">
+        <CardTitle className="text-sm font-bold text-slate-600">
           {title}
         </CardTitle>
+        {percentageChange !== undefined && percentageChange !== 0 && (
+          <div className={`flex items-center gap-1 text-[11px] font-bold ${percentageChange > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+            {percentageChange > 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+            {Math.abs(percentageChange).toFixed(1)}%
+          </div>
+        )}
       </CardHeader>
       <CardContent className="flex-1 min-h-0 p-4">
         <div className="h-full w-full min-h-[180px] relative">

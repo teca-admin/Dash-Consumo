@@ -90,7 +90,7 @@ export default function OverviewChart({ records, dateRange }: OverviewChartProps
                   <LabelList 
                     dataKey={p} 
                     position="top" 
-                    style={{ fill: COLORS[idx % COLORS.length], fontSize: '9px', fontWeight: 'bold' }} 
+                    style={{ fill: COLORS[idx % COLORS.length], fontSize: '11px', fontWeight: 'bold' }} 
                     formatter={formatCompact}
                   />
                 </Line>

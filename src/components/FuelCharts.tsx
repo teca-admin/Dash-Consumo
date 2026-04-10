@@ -28,7 +28,7 @@ export function PieChartCard({ title, data, onFilter, unit = '', isCurrency = fa
         {payload.map((entry: any, index: number) => (
           <li key={`item-${index}`} className="flex items-center gap-1.5 cursor-pointer" onClick={() => onFilter(entry.value)}>
             <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }} />
-            <span className="text-[10px] font-bold text-slate-600">
+            <span className="text-[12px] font-bold text-slate-600">
               {entry.value}: {isCurrency ? formatCurrency(entry.payload.value) : `${formatNumber(entry.payload.value)} ${unit}`}
             </span>
           </li>

@@ -51,8 +51,8 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
 
   return (
     <header className="bg-white text-slate-900 py-4 px-6 border-b border-slate-200 shadow-sm shrink-0">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+      <div className="container mx-auto flex flex-col lg:flex-row items-center gap-8">
+        <div className="flex items-center gap-4 shrink-0">
           <div className="p-1">
             <img 
               src="https://lh3.googleusercontent.com/d/1sNzDKhdh2zH8d8DoyqIjx8l5LzBEXN5g" 
@@ -72,7 +72,7 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 items-end">
+        <div className="flex flex-wrap items-center gap-4 flex-1">
           <div className="flex flex-wrap items-center gap-2 bg-slate-50/50 p-2 rounded-lg border border-slate-100">
             {/* Summary Boxes */}
             <div className="flex gap-1.5 mr-2">
@@ -155,69 +155,69 @@ export default function Header({ options, filters, setFilters, onShowSpreadsheet
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex flex-col gap-0.5">
-              <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">Período</label>
-              <Popover>
-                <PopoverTrigger
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "w-[160px] justify-start text-left font-normal bg-white border-slate-200 text-slate-900 hover:bg-slate-50 h-7 text-[10px] shadow-sm",
-                    !filters.dateRange.from && "text-slate-500"
-                  )}
-                >
-                  <CalendarIcon className="mr-1.5 h-3 w-3 text-primary" />
-                  {filters.dateRange.from ? (
-                    filters.dateRange.to ? (
-                      <>
-                        {safeFormatDate(filters.dateRange.from, "dd/MM/yy")} -{" "}
-                        {safeFormatDate(filters.dateRange.to, "dd/MM/yy")}
-                      </>
-                    ) : (
-                      safeFormatDate(filters.dateRange.from, "dd/MM/yy")
-                    )
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-col gap-0.5">
+            <label className="text-[9px] font-bold text-slate-400 uppercase ml-0.5">Período</label>
+            <Popover>
+              <PopoverTrigger
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "w-[160px] justify-start text-left font-normal bg-white border-slate-200 text-slate-900 hover:bg-slate-50 h-7 text-[10px] shadow-sm",
+                  !filters.dateRange.from && "text-slate-500"
+                )}
+              >
+                <CalendarIcon className="mr-1.5 h-3 w-3 text-primary" />
+                {filters.dateRange.from ? (
+                  filters.dateRange.to ? (
+                    <>
+                      {safeFormatDate(filters.dateRange.from, "dd/MM/yy")} -{" "}
+                      {safeFormatDate(filters.dateRange.to, "dd/MM/yy")}
+                    </>
                   ) : (
-                    <span>Selecione</span>
-                  )}
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="end">
-                  <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={filters.dateRange.from}
-                    selected={{
-                      from: filters.dateRange.from,
-                      to: filters.dateRange.to
-                    }}
-                    onSelect={(range) => setFilters.setDateRange({ from: range?.from, to: range?.to })}
-                    numberOfMonths={2}
-                    locale={ptBR}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+                    safeFormatDate(filters.dateRange.from, "dd/MM/yy")
+                  )
+                ) : (
+                  <span>Selecione</span>
+                )}
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  defaultMonth={filters.dateRange.from}
+                  selected={{
+                    from: filters.dateRange.from,
+                    to: filters.dateRange.to
+                  }}
+                  onSelect={(range) => setFilters.setDateRange({ from: range?.from, to: range?.to })}
+                  numberOfMonths={2}
+                  locale={ptBR}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-            <div className="flex gap-1 mt-4">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                onClick={onShowSpreadsheet}
-                className="text-slate-500 hover:text-primary hover:bg-slate-50 h-7 w-7 border-slate-200 shadow-sm"
-                title="Ver Planilha Original"
-              >
-                <TableIcon className="h-3.5 w-3.5" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={resetFilters}
-                className="text-slate-400 hover:text-primary hover:bg-slate-50 h-7 w-7"
-                title="Redefinir Filtros"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-              </Button>
-            </div>
+          <div className="flex gap-1 mt-4">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={onShowSpreadsheet}
+              className="text-slate-500 hover:text-primary hover:bg-slate-50 h-7 w-7 border-slate-200 shadow-sm"
+              title="Ver Planilha Original"
+            >
+              <TableIcon className="h-3.5 w-3.5" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={resetFilters}
+              className="text-slate-400 hover:text-primary hover:bg-slate-50 h-7 w-7"
+              title="Redefinir Filtros"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+            </Button>
           </div>
         </div>
       </div>

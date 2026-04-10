@@ -51,7 +51,7 @@ export default function PerformanceChart({ records }: PerformanceChartProps) {
                 textAnchor="end" 
                 interval={0} 
                 height={60}
-                tick={{ fontSize: 10, fill: '#64748b' }}
+                tick={{ fontSize: 11, fill: '#64748b', fontWeight: 'bold' }}
               />
               <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
               <Tooltip 
@@ -72,7 +72,7 @@ export default function PerformanceChart({ records }: PerformanceChartProps) {
                     <LabelList 
                       dataKey="total" 
                       position="top" 
-                      style={{ fill: '#64748b', fontSize: '10px', fontWeight: 'bold' }} 
+                      style={{ fill: '#64748b', fontSize: '12px', fontWeight: 'bold' }} 
                       formatter={formatNumber}
                     />
                   )}

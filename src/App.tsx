@@ -145,23 +145,27 @@ export default function App() {
         {/* Row 1: Pie Charts and Performance */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-3">
-            <PieChartCard 
-              title="Custo por Combustível" 
-              data={costData} 
-              onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
-              isCurrency 
-            />
+            <div className="h-[400px]">
+              <PieChartCard 
+                title="Custo por Combustível" 
+                data={costData} 
+                onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
+                isCurrency 
+              />
+            </div>
           </div>
           <div className="lg:col-span-3">
-            <PieChartCard 
-              title="Litragem por Combustível" 
-              data={litersData} 
-              onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
-              unit="L" 
-            />
+            <div className="h-[400px]">
+              <PieChartCard 
+                title="Litragem por Combustível" 
+                data={litersData} 
+                onFilter={(f) => setSelectedFuel(f === selectedFuel ? 'all' : f)} 
+                unit="L" 
+              />
+            </div>
           </div>
           <div className="lg:col-span-6">
-            <div className="h-full min-h-[350px]">
+            <div className="h-[400px]">
               <PerformanceChart records={filteredRecords} />
             </div>
           </div>
@@ -170,12 +174,12 @@ export default function App() {
         {/* Row 2: Table and Overview */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-6">
-            <div className="h-full min-h-[400px]">
+            <div className="h-[400px]">
               <DetailsTable records={filteredRecords} />
             </div>
           </div>
           <div className="lg:col-span-6">
-            <div className="h-full min-h-[400px]">
+            <div className="h-[400px]">
               <OverviewChart records={filteredRecords} dateRange={dateRange} />
             </div>
           </div>
